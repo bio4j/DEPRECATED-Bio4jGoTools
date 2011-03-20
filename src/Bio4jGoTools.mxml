@@ -171,9 +171,9 @@
 	<s:RichText text="Bio4j Go Tools is a set of Gene-Ontology related Web Services using Bio4j as back-end." 
 				width="100%"/>
 	<mx:TabNavigator width="100%" height="100%">
-		<mx:VBox label="GoAnnotation/Slim" 
+		<mx:VBox label="Go Annotation/Slim" 
 				 width="100%"
-				 height="100%" label.Annotation="Go Annotation/Slim">
+				 height="100%">
 			<s:HGroup width="100%">
 				<s:RadioButton label="GoAnnotation" groupName="radioButtonGroup" selected="true" 
 							   id="goAnnotationRadioButton" click="goAnnotationRadioButton_clickHandler(event)" 
@@ -196,11 +196,11 @@
 					<s:RadioButton label=" Enter ('\n')" groupName="proteinSeparatorRadioButtonGroup" 
 								   id="enterProteinRadioButton" selected="true"/>
 					<s:RadioButton label=" Tab ('\t')" groupName="proteinSeparatorRadioButtonGroup" 
-								   id="tabProteinRadioButton" selected.Annotation="false" />
+								   id="tabProteinRadioButton" selected="false" />
 					<s:RadioButton label=" Whitespace (' ')" groupName="proteinSeparatorRadioButtonGroup" 
-								   id="whiteSpaceProteinRadioButton" selected.Annotation="false" />
+								   id="whiteSpaceProteinRadioButton" selected="false" />
 					<s:RadioButton label="Character:" groupName="proteinSeparatorRadioButtonGroup" 
-								   id="characterProteinRadioButton" selected.Annotation="false" />
+								   id="characterProteinRadioButton" selected="false" />
 					<s:TextInput enabled="true" id="characterProteinTextInput" width="18" maxChars="1"/>
 				</s:HGroup>	
 			</mx:VBox>	
@@ -233,14 +233,15 @@
 				<s:Button id="getFileButton" click="getFileButton_clickHandler(event)"  label="Get results"/>
 			</s:HGroup>			
 		</mx:VBox>
-		<mx:VBox label="GoAnnotation charts" 
+		<mx:VBox label="GoAnnotation charts (coming soon)" 
 				 width="100%"
-				 height="100%" label.Annotation="GoAnnotation charts (coming soon)" enabled.Annotation="false">
+				 height="100%" enabled="false">
 			<gui:GoAnnotationChart width="100%" height="100%"/>
 		</mx:VBox>
-		<mx:VBox label="Go Annotation charts" 
+		<mx:VBox label="Go Slim charts (coming soon)" 
 				 width="100%"
-				 height="100%" label.Annotation="Go Slim charts (coming soon)" enabled.Annotation="false">
+				 height="100%" 
+				 enabled="false">
 		</mx:VBox>
 	</mx:TabNavigator>
 	<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">
