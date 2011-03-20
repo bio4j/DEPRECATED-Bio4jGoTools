@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx" currentState="Annotation"
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)" 
+					   xmlns:gui="com.era7.bioinfo.go.gui.*"
+					   >
+	<s:layout>
+		<s:VerticalLayout paddingLeft="20" paddingRight="20" 
+						  paddingTop="20" 
+						  horizontalAlign="center"/>
+		
+	</s:layout>
+	<s:states>
+		<s:State name="Annotation"/>
+		<s:State name="GoSlim" />
+	</s:states>
+	<fx:Declarations>
+		<s:RadioButtonGroup id="proteinSeparatorRadioButtonGroup"/>
+		<s:RadioButtonGroup id="slimSetSeparatorRadioButtonGroup"/>
+		<s:RadioButtonGroup id="versionRadioButtonGroup"/>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.era7.bioinfo.go.comm.GoMapper;
+			import com.era7.bioinfo.xml.Protein;
+			import com.era7.bioinfo.xml.go.GoTerm;
+			import com.era7.bioinfo.xml.go.SlimSet;
+			import com.era7.communication.interfaces.ServerCallable;
+			import com.era7.communication.managers.MainManager;
+			import com.era7.communication.xml.Request;
+			import com.era7.communication.xml.Response;
+			
+			import flash.net.navigateToURL;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			
+			
+			public static const GO_SLIM_STATE:String = "GoSlim";
+			public static const GO_ANNOTATION_STATE:String = "Annotation";
+			
+			protected var goMapper:GoMapper = null;
+			
+			protected var resultFile:File = null;
+			
+			[Bindable]
+			[Embed(source="../assets/icons/logoOhnoseq.jpg")]
+			protected var ohnoseqLogo:Class;
+			[Bindable]
+			[Embed(source="../assets/icons/logoBio4jTwitter.jpg")]
+			protected var bio4jLogo:Class;
+			
+			
+			
+			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				URLRequestDefaults.idleTimeout = 18000000;
+				
+				
+				goMapper = new GoMapper();
+			}
+			
+			
+			protected function goAnnotationRadioButton_clickHandler(event:MouseEvent):void
+			{
+				if(currentState != GO_ANNOTATION_STATE){
+					currentState = GO_ANNOTATION_STATE;
+				}
+			}
+			
+			
+			protected function goSlimRadioButton_clickHandler(event:MouseEvent):void
+			{
+				if(currentState != GO_SLIM_STATE){
+					currentState = GO_SLIM_STATE;
+				}
+			}
+						
+			
+			private function getProteinsFromTextArea():XML{
+				var proteinsXML:XML = new XML(<proteins/>);
+				
+				var separator:String = "";
+				if(enterProteinRadioButton.selected){
+					separator = "\n";					
+				}else if(tabProteinRadioButton.selected){
+					separator = "\t";
+				}else if(whiteSpaceProteinRadioButton.selected){
+					separator = " ";
+				}else if(characterProteinRadioButton.selected){
+					separator = characterProteinTextInput.text;
+				}
+				
+				var proteinIds:Array = proteinIdsTextArea.text.split(separator);
+				
+				for each(var id:String in proteinIds){
+					if(id != "" && id != "\s"){
+						var tempProtein:Protein = new Protein();
+						tempProtein.id = id;
+						proteinsXML.appendChild(tempProtein.getContent());
+					}					
+				}
+				
+				return proteinsXML;
+			}
+			private function getSlimSetFromTextArea():SlimSet{
+				var slimSet:SlimSet = new SlimSet();
+				
+				var separator:String = "";
+				if(enterSlimSetRadioButton.selected){
+					separator = "\n";					
+				}else if(tabSlimSetRadioButton.selected){
+					separator = "\t";
+				}else if(whiteSpaceSlimSetRadioButton.selected){
+					separator = " ";
+				}else if(characterSlimSetRadioButton.selected){
+					separator = characterSlimSetTextInput.text;
+				}
+				
+				var goIds:Array = slimSetIdsTextArea.text.split(separator);
+				
+				for each(var id:String in goIds){
+					if(id != "" && id != "\s"){
+						var tempGo:GoTerm = new GoTerm();
+						tempGo.id = id;
+						slimSet.getContent().appendChild(tempGo.getContent());
+					}					
+				}
+				
+				return slimSet;
+			}
+			
+			protected function getFileButton_clickHandler(event:MouseEvent):void
+			{
+				resultFile = new File();
+				resultFile.addEventListener(Event.SELECT,onResultFileSelect);
+				resultFile.browseForSave("GoSlim.xml");
+			}	
+			
+			protected function onResultFileSelect(event:Event):void{
+				var proteinsXML:XML = getProteinsFromTextArea();
+				
+				if(currentState == GO_ANNOTATION_STATE){
+					goMapper.goAnnotation(proteinsXML,resultFile,false);					
+				}else if(currentState == GO_SLIM_STATE){
+					var slimSet:SlimSet = getSlimSetFromTextArea();
+					goMapper.goSlim(proteinsXML,slimSet,true,resultFile,false);
+				}
+			}
+			
+			
+			
+
+
+			protected function ohNoSeqBanner_clickHandler(event:MouseEvent):void
+			{
+				navigateToURL(new URLRequest("http://www.ohnosequences.com"),"_blank");
+			}
+
+
+			protected function label1_clickHandler(event:MouseEvent):void
+			{
+				navigateToURL(new URLRequest("http://www.bio4j.com"),"_blank");
+			}
+
+		]]>
+	</fx:Script>
+	<s:Label text="Bio4j Go Tools" fontWeight="bold" fontSize="24" height="50"/>
+	<s:RichText text="Bio4j Go Tools is a set of Gene-Ontology related Web Services using Bio4j as back-end." 
+				width="100%"/>
+	<mx:TabNavigator width="100%" height="100%">
+		<mx:VBox label="GoAnnotation/Slim" 
+				 width="100%"
+				 height="100%" label.Annotation="Go Annotation/Slim">
+			<s:HGroup width="100%">
+				<s:RadioButton label="GoAnnotation" groupName="radioButtonGroup" selected="true" 
+							   id="goAnnotationRadioButton" click="goAnnotationRadioButton_clickHandler(event)" 
+							   left="20" top="10" />
+				<s:RadioButton label="GoSlim" groupName="radioButtonGroup" id="goSlimRadioButton" selected="false" 
+							   click="goSlimRadioButton_clickHandler(event)" top="10" left="136"   />
+			</s:HGroup>	
+			<mx:VBox width="100%" 
+					 paddingLeft="10" 
+					 paddingTop="10" 
+					 paddingRight="10" 
+					 paddingBottom="10" 
+					 cornerRadius="10" 
+					 backgroundColor="#E4E4E4">
+				<s:Label text="Enter the protein ids in the text-area and specify the separator" 
+						 height="15" left="20" top="49"/>
+				<s:TextArea y="72" left="20" right="20" id="proteinIdsTextArea" editable="true"  width="100%"/>
+				<s:HGroup y="194" left="20" right="20" verticalAlign="middle" >
+					<s:Label text="Separador:" text.GoSlim="Separator:"/>
+					<s:RadioButton label=" Enter ('\n')" groupName="proteinSeparatorRadioButtonGroup" 
+								   id="enterProteinRadioButton" selected="true"/>
+					<s:RadioButton label=" Tab ('\t')" groupName="proteinSeparatorRadioButtonGroup" 
+								   id="tabProteinRadioButton" selected.Annotation="false" />
+					<s:RadioButton label=" Whitespace (' ')" groupName="proteinSeparatorRadioButtonGroup" 
+								   id="whiteSpaceProteinRadioButton" selected.Annotation="false" />
+					<s:RadioButton label="Character:" groupName="proteinSeparatorRadioButtonGroup" 
+								   id="characterProteinRadioButton" selected.Annotation="false" />
+					<s:TextInput enabled="true" id="characterProteinTextInput" width="18" maxChars="1"/>
+				</s:HGroup>	
+			</mx:VBox>	
+			<mx:VBox includeIn="GoSlim" 
+					 width="100%"
+					 paddingLeft="10" 
+					 paddingTop="10" 
+					 paddingRight="10" 
+					 paddingBottom="10" 
+					 cornerRadius="10" 
+					 backgroundColor="#E4E4E4">
+				<s:Label 
+					height="15" left="20" top="260" text="Enter the Go term ids of the slim-set in the text area and specify the separator"/>
+				<s:TextArea y="287" left="20" right="20" id="slimSetIdsTextArea" 
+							editable="true" width="100%"/>
+				<s:HGroup y="409" left="20" right="20" verticalAlign="middle">
+					<s:Label text="Separator:"/>
+					<s:RadioButton label=" Enter ('\n')" groupName="slimSetSeparatorRadioButtonGroup" 
+								   id="enterSlimSetRadioButton" selected="true"/>
+					<s:RadioButton label=" Tab ('\t')" groupName="slimSetSeparatorRadioButtonGroup" 
+								   id="tabSlimSetRadioButton"/>
+					<s:RadioButton label="Whitespace (' ')" groupName="slimSetSeparatorRadioButtonGroup" 
+								   id="whiteSpaceSlimSetRadioButton"/>
+					<s:RadioButton label="Character:" groupName="slimSetSeparatorRadioButtonGroup" 
+								   id="characterSlimSetRadioButton"/>
+					<s:TextInput enabled="true" id="characterSlimSetTextInput" width="18" maxChars="1"/>
+				</s:HGroup>
+			</mx:VBox>
+			<s:HGroup width="100%" verticalAlign="middle" horizontalAlign="right" gap="5">				  
+				<s:Button id="getFileButton" click="getFileButton_clickHandler(event)"  label="Get results"/>
+			</s:HGroup>			
+		</mx:VBox>
+		<mx:VBox label="GoAnnotation charts" 
+				 width="100%"
+				 height="100%" label.Annotation="GoAnnotation charts (coming soon)" enabled.Annotation="false">
+			<gui:GoAnnotationChart width="100%" height="100%"/>
+		</mx:VBox>
+		<mx:VBox label="Go Annotation charts" 
+				 width="100%"
+				 height="100%" label.Annotation="Go Slim charts (coming soon)" enabled.Annotation="false">
+		</mx:VBox>
+	</mx:TabNavigator>
+	<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">
+		<s:Label text="These services are possible thanks to:"/>
+		<mx:SWFLoader 
+			 source="{bio4jLogo}"
+			 click="label1_clickHandler(event)"
+			 buttonMode="true"
+			 mouseChildren="false"
+			 useHandCursor="true"/>
+		<mx:SWFLoader 
+			source="{ohnoseqLogo}"
+			click="ohNoSeqBanner_clickHandler(event)"
+			buttonMode="true"
+			mouseChildren="false"
+			useHandCursor="true"/>
+	</mx:HBox>	
+</s:WindowedApplication>

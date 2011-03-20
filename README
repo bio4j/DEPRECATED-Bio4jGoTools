@@ -1,0 +1,9 @@
+GoTools is an AIR project including several applications dealing with Gene Ontology.
+
+Right now there are three different applications:
+
+- GoAnnotation: For protein-term GO annotations and GoSlim jobs
+- GoSlimChart: Charts representing GoSlim results
+- GeneAnnotatedByGoTermChart: As its own name says, charts representing the relationships between annotated genes and Go terms.
+
+.exe files for installing each application can be found on 'releases' top-level folder.
