@@ -77,7 +77,10 @@ package com.era7.bioinfo.go.comm
 			}
 			urlRequest.method = URLRequestMethod.POST;
 			urlRequest.idleTimeout = 18000000;
-			var vars:URLVariables = new URLVariables();
+			var vars:URLVariables = new URLVariables();		
+			
+			//Debugger.appendText(temp.toString(),Debugger.REQUEST_MODE);
+			
 			vars.request = temp.toString();
 			urlRequest.data = vars; 
 			
@@ -148,6 +151,9 @@ package com.era7.bioinfo.go.comm
 			urlRequest.method = URLRequestMethod.POST;
 			urlRequest.idleTimeout = 18000000;
 			var vars:URLVariables = new URLVariables();
+			
+			//Debugger.appendText(temp.toString(),Debugger.REQUEST_MODE);
+			
 			vars.request = temp.toString();
 			urlRequest.data = vars; 
 			
@@ -166,6 +172,8 @@ package com.era7.bioinfo.go.comm
 		private function onCompleteUrlLoader(event:Event):void{
 			
 			var response:XML = XML(String(urlLoader.data));		
+			
+			//Debugger.appendText(response.toXMLString(),Debugger.RESPONSE_MODE);
 			
 			var fileStream:FileStream = new FileStream();
 			fileStream.open(fileToSaveResult,FileMode.WRITE);

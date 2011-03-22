@@ -57,8 +57,7 @@
 			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
 			{
 				URLRequestDefaults.idleTimeout = 18000000;
-				
-				
+								
 				goMapper = new GoMapper();
 			}
 			
@@ -192,7 +191,7 @@
 						 height="15" left="20" top="49"/>
 				<s:TextArea y="72" left="20" right="20" id="proteinIdsTextArea" editable="true"  width="100%"/>
 				<s:HGroup y="194" left="20" right="20" verticalAlign="middle" >
-					<s:Label text="Separador:" text.GoSlim="Separator:"/>
+					<s:Label text="Separator:"/>
 					<s:RadioButton label=" Enter ('\n')" groupName="proteinSeparatorRadioButtonGroup" 
 								   id="enterProteinRadioButton" selected="true"/>
 					<s:RadioButton label=" Tab ('\t')" groupName="proteinSeparatorRadioButtonGroup" 
@@ -245,7 +244,7 @@
 		</mx:VBox>
 	</mx:TabNavigator>
 	<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">
-		<s:Label text="These services are possible thanks to:"/>
+		<s:Label text="Powered by:"/>
 		<mx:SWFLoader 
 			 source="{bio4jLogo}"
 			 click="label1_clickHandler(event)"
