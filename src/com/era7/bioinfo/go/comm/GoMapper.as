@@ -79,7 +79,7 @@ package com.era7.bioinfo.go.comm
 			urlRequest.idleTimeout = 18000000;
 			var vars:URLVariables = new URLVariables();		
 			
-			//Debugger.appendText(temp.toString(),Debugger.REQUEST_MODE);
+			Debugger.appendText(temp.toString(),Debugger.REQUEST_MODE);
 			
 			vars.request = temp.toString();
 			urlRequest.data = vars; 
@@ -111,7 +111,7 @@ package com.era7.bioinfo.go.comm
 			
 			resultFile = new File();
 			resultFile.addEventListener(Event.SELECT,onResultFileSelectGoSlim);
-			resultFile.browseForSave("GoSlim.xml");
+			resultFile.browseForSave("results.xml");
 			
 			/*var urlRequest:URLRequest = new URLRequest(UrlManager.DOWNLOAD_GO_SLIM_URL);
 			urlRequest.method = URLRequestMethod.POST;

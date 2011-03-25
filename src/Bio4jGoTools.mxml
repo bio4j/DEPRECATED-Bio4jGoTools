@@ -133,9 +133,9 @@
 			
 			protected function getFileButton_clickHandler(event:MouseEvent):void
 			{
-				resultFile = new File();
+				resultFile = File.desktopDirectory.resolvePath("results.xml");
 				resultFile.addEventListener(Event.SELECT,onResultFileSelect);
-				resultFile.browseForSave("GoSlim.xml");
+				resultFile.browseForSave("results.xml");
 			}	
 			
 			protected function onResultFileSelect(event:Event):void{
@@ -187,8 +187,15 @@
 					 paddingBottom="10" 
 					 cornerRadius="10" 
 					 backgroundColor="#E4E4E4">
-				<s:Label text="Enter the protein ids in the text-area and specify the separator" 
-						 height="15" left="20" top="49"/>
+				<s:HGroup width="100%">
+					<s:Label text="Enter the protein ids in the text-area and specify the separator" 
+							 height="15" 
+							 />
+					<mx:Spacer width="100%"/>
+					<s:Label text="(Uniprot accessions e.g. Q01593)" 
+							 height="15" 
+							 fontStyle="italic"/>
+				</s:HGroup>				
 				<s:TextArea y="72" left="20" right="20" id="proteinIdsTextArea" editable="true"  width="100%"/>
 				<s:HGroup y="194" left="20" right="20" verticalAlign="middle" >
 					<s:Label text="Separator:"/>
@@ -211,8 +218,14 @@
 					 paddingBottom="10" 
 					 cornerRadius="10" 
 					 backgroundColor="#E4E4E4">
-				<s:Label 
-					height="15" left="20" top="260" text="Enter the Go term ids of the slim-set in the text area and specify the separator"/>
+				<s:HGroup width="100%">
+				<s:Label height="15" 
+					text="Enter the Go term ids of the slim-set in the text area and specify the separator"/>
+				<mx:Spacer width="100%"/>
+				<s:Label height="15" 
+					text="(e.g. GO:0019787)"
+					fontStyle="italic"/>
+				</s:HGroup>	
 				<s:TextArea y="287" left="20" right="20" id="slimSetIdsTextArea" 
 							editable="true" width="100%"/>
 				<s:HGroup y="409" left="20" right="20" verticalAlign="middle">
