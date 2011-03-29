@@ -5,7 +5,7 @@ package com.era7.bioinfo.go.comm
 		
 		public static const BASE_URL:String = "http://ec2-46-51-138-32.eu-west-1.compute.amazonaws.com:8080/GoAmazonServer/";
 		
-		public static const BASE_URL_BIO4J:String = "http://ec2-46-137-32-134.eu-west-1.compute.amazonaws.com:8080/Bio4jTestServer/";
+		public static const BASE_URL_BIO4J:String = "http://ec2-46-137-41-205.eu-west-1.compute.amazonaws.com:8080/Bio4jTestServer/";
 		//public static const BASE_URL_BIO4J:String = "http://localhost:8080/Bio4jTestServer/";
 
 		//public static const BASE_URL:String = "http://localhost:8080/Bio4jTestServer/";
